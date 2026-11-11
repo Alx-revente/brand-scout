@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Brand Scout — carnet de comparaison de sweats, pulls et vestes de marque.">
+<title>Brand Scout</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#172033;background:#f4f6fb}
+*{box-sizing:border-box}body{margin:0;padding:22px}.wrap{max-width:1050px;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:14px;margin-bottom:20px}
+h1{font-size:clamp(1.6rem,4vw,2.25rem);margin:0}.sub{color:#657089;margin-top:6px}
+.pill{background:#e7edff;color:#294d9b;padding:7px 11px;border-radius:99px;font-size:.82rem;font-weight:750}
+.hero{background:linear-gradient(120deg,#172b53,#3159a8);color:white;border-radius:18px;padding:22px;margin-bottom:16px}
+.hero p{color:#e0e8fb;margin:8px 0 0;max-width:700px;line-height:1.5}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:16px}
+.card{background:white;border:1px solid #e4e8f0;border-radius:18px;padding:19px;box-shadow:0 5px 18px #15264a0a}
+h2{font-size:1.05rem;margin:0 0 14px}label{display:block;font-size:.85rem;font-weight:680;margin:11px 0 6px}
+input,select,textarea{width:100%;padding:11px 12px;border:1px solid #d8deea;border-radius:10px;font:inherit;background:white}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+button{border:0;border-radius:11px;padding:11px 14px;font:inherit;font-weight:720;cursor:pointer}
+.primary{background:#294fa8;color:white;margin-top:14px;width:100%}.secondary{background:#edf1f8;color:#283650}
+.metric{font-size:1.9rem;font-weight:850;margin-top:4px}.muted{color:#6c778d;font-size:.88rem;line-height:1.45}
+.progress{height:9px;background:#e9edf5;border-radius:20px;overflow:hidden;margin:12px 0}.bar{height:100%;width:0;background:#315fc8}
+.list{display:grid;gap:10px;margin-top:14px}.item{border:1px solid #e7ebf2;border-radius:13px;padding:13px;display:flex;justify-content:space-between;gap:12px;align-items:center}
+.item strong{display:block}.tag{font-size:.78rem;color:#56647c;margin-top:4px}.price{font-weight:820;white-space:nowrap}
+.empty{color:#7b8598;text-align:center;padding:22px 8px}
+.toolbar{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.toolbar input,.toolbar select{max-width:220px}
+footer{margin-top:18px;color:#68748a;font-size:.82rem;line-height:1.55}
+@media(max-width:740px){body{padding:14px}.grid{grid-template-columns:1fr}header{align-items:flex-start;flex-direction:column}.toolbar input,.toolbar select{max-width:none;width:100%}}
+</style>
+</head>
+<body><div class="wrap">
+<header><div><h1>🧥 Brand Scout</h1><div class="sub">Carnet de recherche et de comparaison — vêtements de marque</div></div><span class="pill">Budget repère : 50 €</span></header>
+<section class="hero"><strong>Repère les articles qui correspondent à tes critères.</strong><p>Enregistre des sweats, pulls et vestes, compare les prix que tu as relevés et garde une trace des détails à vérifier. Les données sont saisies manuellement : aucune connexion ni collecte automatique sur une plateforme.</p></section>
+<div class="grid">
+<section class="card">
+<h2>Ajouter un article</h2>
+<form id="form">
+<label for="model">Nom du modèle / description</label><input id="model" required maxlength="80" placeholder="Ex. : sweat zippé à capuche">
+<div class="row">
+<div><label for="brand">Marque</label><select id="brand"><option>Nike</option><option>Adidas</option><option>Ralph Lauren</option><option>Lacoste</option><option>The North Face</option><option>Tommy Hilfiger</option><option>Carhartt</option><option>Levi's</option><option>Patagonia</option><option>Stone Island</option><option>Autre</option></select></div>
+<div><label for="type">Catégorie</label><select id="type"><option>Sweat</option><option>Pull</option><option>Veste</option></select></div>
+</div>
+<div class="row">
+<div><label for="size">Taille</label><input id="size" maxlength="10" placeholder="Ex. : M"></div>
+<div><label for="condition">État annoncé</label><select id="condition"><option>Neuf avec étiquette</option><option>Très bon état</option><option>Bon état</option><option>État correct</option></select></div>
+</div>
+<div class="row">
+<div><label for="price">Prix affiché (€)</label><input id="price" type="number" min="0" step=".01" required placeholder="0,00"></div>
+<div><label for="source">Source consultée</label><input id="source" maxlength="60" placeholder="Site / boutique"></div>
+</div>
+<label for="notes">Notes à vérifier</label><textarea id="notes" rows="2" maxlength="260" placeholder="Défauts, mesures, étiquette, preuve d'achat, vendeur…"></textarea>
+<button class="primary" type="submit">Enregistrer l'article</button>
+</form>
+</section>
+<section class="card">
+<h2>Budget de comparaison</h2><div class="muted">Budget maximum défini</div><div class="metric">50,00 €</div>
+<div class="muted" id="spent">0,00 € de prix enregistrés</div><div class="progress"><div class="bar" id="bar"></div></div>
+<div class="muted" id="remaining">50,00 € disponibles sur le budget repère</div>
+<p class="muted" style="margin-top:18px">Le budget sert de filtre indicatif, pas de recommandation d'achat. Vérifie toujours l'état, les mesures et l'authenticité avant toute décision.</p>
+</section>
+</div>
+<section class="card" style="margin-top:16px">
+<div class="toolbar" style="justify-content:space-between">
+<h2 style="margin:0">Ma sélection</h2>
+<div class="toolbar"><input id="search" placeholder="Filtrer par marque ou modèle" aria-label="Filtrer"><select id="filterType" aria-label="Filtrer par catégorie"><option value="">Toutes catégories</option><option>Sweat</option><option>Pull</option><option>Veste</option></select><button class="secondary" id="clear" type="button">Tout effacer</button></div>
+</div>
+<div id="items" class="list"><div class="empty">Aucun article enregistré. Ajoute une première référence pour commencer.</div></div>
+</section>
+<footer>Prototype de comparaison personnelle. Les informations sont saisies manuellement et conservées dans le stockage local de ce navigateur. Ce site ne se connecte pas à Vinted, ne récupère pas d'annonces, n'envoie pas de messages et n'effectue aucun achat. Le stockage local n'est pas synchronisé entre tes appareils. Ne saisis aucune donnée personnelle ou mot de passe.</footer>
+</div>
+<script>
+const KEY='brandScoutItemsV1', BUDGET=50;
+const $=id=>document.getElementById(id);
+let items=[];try{items=JSON.parse(localStorage.getItem(KEY)||'[]')}catch(e){items=[]}
+function euro(n){return new Intl.NumberFormat('fr-FR',{style:'currency',currency:'EUR'}).format(n)}
+function save(){localStorage.setItem(KEY,JSON.stringify(items));render()}
+function render(){
+ const total=items.reduce((s,x)=>s+x.price,0);
+ $('spent').textContent=euro(total)+' de prix enregistrés';
+ $('remaining').textContent=total<=BUDGET?euro(BUDGET-total)+' disponibles sur le budget repère':euro(total-BUDGET)+' au-dessus du budget repère';
+ $('bar').style.width=Math.min(100,total/BUDGET*100)+'%';
+ const q=$('search').value.trim().toLocaleLowerCase('fr'), cat=$('filterType').value;
+ const filtered=items.filter(x=>(!cat||x.type===cat)&&(!q||(x.brand+' '+x.model).toLocaleLowerCase('fr').includes(q)));
+ $('items').innerHTML='';
+ if(!filtered.length){$('items').innerHTML='<div class="empty">'+(items.length?'Aucun résultat pour ces filtres.':'Aucun article enregistré. Ajoute une première référence pour commencer.')+'</div>';return}
+ filtered.forEach(x=>{
+  const i=items.indexOf(x), el=document.createElement('div');el.className='item';
+  const info=document.createElement('div'), title=document.createElement('strong');title.textContent=x.brand+' — '+x.model;
+  const detail=document.createElement('div');detail.className='tag';detail.textContent=[x.type,x.size?'Taille '+x.size:'',x.condition,x.source].filter(Boolean).join(' · ');
+  const note=document.createElement('div');note.className='tag';note.textContent=x.notes||'Aucune note';
+  info.append(title,detail,note);
+  const side=document.createElement('div');side.style.textAlign='right';
+  const price=document.createElement('div');price.className='price';price.textContent=euro(x.price);
+  const del=document.createElement('button');del.className='secondary';del.type='button';del.textContent='Supprimer';del.style.marginTop='7px';del.onclick=()=>{items.splice(i,1);save()};
+  side.append(price,del);el.append(info,side);$('items').append(el);
+ });
+}
+$('form').addEventListener('submit',e=>{e.preventDefault();const price=Number($('price').value);if(!Number.isFinite(price)||price<0)return;
+ items.unshift({model:$('model').value.trim(),brand:$('brand').value,type:$('type').value,size:$('size').value.trim(),condition:$('condition').value,price,source:$('source').value.trim(),notes:$('notes').value.trim()});save();e.target.reset()});
+$('search').addEventListener('input',render);$('filterType').addEventListener('change',render);
+$('clear').addEventListener('click',()=>{if(confirm('Effacer tous les articles enregistrés sur cet appareil ?')){items=[];save()}});
+render();
+</script></body></html>
